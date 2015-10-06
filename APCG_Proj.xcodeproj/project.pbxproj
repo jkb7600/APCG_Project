@@ -15,6 +15,9 @@
 		D0BDC9C11BC4815B008CB42A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BDC9BF1BC4815B008CB42A /* LaunchScreen.storyboard */; };
 		D0BDC9CC1BC4815B008CB42A /* APCG_ProjTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BDC9CB1BC4815B008CB42A /* APCG_ProjTests.m */; };
 		D0BDC9D71BC4815B008CB42A /* APCG_ProjUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BDC9D61BC4815B008CB42A /* APCG_ProjUITests.m */; };
+		D0BDC9E51BC4817A008CB42A /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E41BC4817A008CB42A /* opencv2.framework */; settings = {ASSET_TAGS = (); }; };
+		D0BDC9E71BC481B2008CB42A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E61BC481B2008CB42A /* AssetsLibrary.framework */; };
+		D0BDC9E91BC481BF008CB42A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E81BC481BF008CB42A /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +54,9 @@
 		D0BDC9D21BC4815B008CB42A /* APCG_ProjUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APCG_ProjUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BDC9D61BC4815B008CB42A /* APCG_ProjUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APCG_ProjUITests.m; sourceTree = "<group>"; };
 		D0BDC9D81BC4815B008CB42A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D0BDC9E41BC4817A008CB42A /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		D0BDC9E61BC481B2008CB42A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		D0BDC9E81BC481BF008CB42A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0BDC9E91BC481BF008CB42A /* CoreGraphics.framework in Frameworks */,
+				D0BDC9E71BC481B2008CB42A /* AssetsLibrary.framework in Frameworks */,
+				D0BDC9E51BC4817A008CB42A /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +90,9 @@
 		D0BDC9A51BC4815B008CB42A = {
 			isa = PBXGroup;
 			children = (
+				D0BDC9E81BC481BF008CB42A /* CoreGraphics.framework */,
+				D0BDC9E61BC481B2008CB42A /* AssetsLibrary.framework */,
+				D0BDC9E41BC4817A008CB42A /* opencv2.framework */,
 				D0BDC9B01BC4815B008CB42A /* APCG_Proj */,
 				D0BDC9CA1BC4815B008CB42A /* APCG_ProjTests */,
 				D0BDC9D51BC4815B008CB42A /* APCG_ProjUITests */,
@@ -411,6 +423,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = APCG_Proj/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "JKBDev.APCG-Proj";
@@ -422,6 +438,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = APCG_Proj/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "JKBDev.APCG-Proj";
