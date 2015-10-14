@@ -7,9 +7,10 @@
 //
 
 #import "ViewController.h"
+#import "OpenCVWrapper.h"
 
 @interface ViewController ()
-
+@property (strong,nonatomic)OpenCVWrapper* cv2;
 @end
 
 @implementation ViewController
@@ -17,6 +18,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.cv2 = [[OpenCVWrapper alloc] init];
+}
+
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    self.imageView.image = [self.cv2 genEdgeImage:[UIImage imageNamed:@"mug.jpg"]];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -18,6 +18,8 @@
 		D0BDC9E51BC4817A008CB42A /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E41BC4817A008CB42A /* opencv2.framework */; settings = {ASSET_TAGS = (); }; };
 		D0BDC9E71BC481B2008CB42A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E61BC481B2008CB42A /* AssetsLibrary.framework */; };
 		D0BDC9E91BC481BF008CB42A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E81BC481BF008CB42A /* CoreGraphics.framework */; };
+		D0ED4CE71BCDDF53000BAB5D /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0ED4CE61BCDDF53000BAB5D /* OpenCVWrapper.mm */; settings = {ASSET_TAGS = (); }; };
+		D0ED4CE91BCDE3CE000BAB5D /* mug.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D0ED4CE81BCDE3CE000BAB5D /* mug.jpg */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,9 @@
 		D0BDC9E41BC4817A008CB42A /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
 		D0BDC9E61BC481B2008CB42A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		D0BDC9E81BC481BF008CB42A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		D0ED4CE51BCDDF53000BAB5D /* OpenCVWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
+		D0ED4CE61BCDDF53000BAB5D /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
+		D0ED4CE81BCDE3CE000BAB5D /* mug.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mug.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +127,8 @@
 				D0BDC9BF1BC4815B008CB42A /* LaunchScreen.storyboard */,
 				D0BDC9C21BC4815B008CB42A /* Info.plist */,
 				D0BDC9B11BC4815B008CB42A /* Supporting Files */,
+				D0ED4CE51BCDDF53000BAB5D /* OpenCVWrapper.h */,
+				D0ED4CE61BCDDF53000BAB5D /* OpenCVWrapper.mm */,
 			);
 			path = APCG_Proj;
 			sourceTree = "<group>";
@@ -129,6 +136,7 @@
 		D0BDC9B11BC4815B008CB42A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0ED4CE81BCDE3CE000BAB5D /* mug.jpg */,
 				D0BDC9B21BC4815B008CB42A /* main.m */,
 			);
 			name = "Supporting Files";
@@ -258,6 +266,7 @@
 				D0BDC9C11BC4815B008CB42A /* LaunchScreen.storyboard in Resources */,
 				D0BDC9BE1BC4815B008CB42A /* Assets.xcassets in Resources */,
 				D0BDC9BC1BC4815B008CB42A /* Main.storyboard in Resources */,
+				D0ED4CE91BCDE3CE000BAB5D /* mug.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +293,7 @@
 			files = (
 				D0BDC9B91BC4815B008CB42A /* ViewController.m in Sources */,
 				D0BDC9B61BC4815B008CB42A /* AppDelegate.m in Sources */,
+				D0ED4CE71BCDDF53000BAB5D /* OpenCVWrapper.mm in Sources */,
 				D0BDC9B31BC4815B008CB42A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -516,6 +526,7 @@
 				D0BDC9DD1BC4815B008CB42A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D0BDC9DE1BC4815B008CB42A /* Build configuration list for PBXNativeTarget "APCG_ProjTests" */ = {
 			isa = XCConfigurationList;
@@ -524,6 +535,7 @@
 				D0BDC9E01BC4815B008CB42A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D0BDC9E11BC4815B008CB42A /* Build configuration list for PBXNativeTarget "APCG_ProjUITests" */ = {
 			isa = XCConfigurationList;
@@ -532,6 +544,7 @@
 				D0BDC9E31BC4815B008CB42A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
