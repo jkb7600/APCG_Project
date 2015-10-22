@@ -23,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    self.cv2 = [[OpenCVWrapper alloc] init];
+    self.cv2 = [OpenCVWrapper sharedInstance];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -97,7 +97,7 @@
         [videoConnection setVideoOrientation:orientation];
     }
     
-    // show preview layer
+    // show preview layer -- TEMP. Will render custom soon
     CALayer* root = self.view.layer;
     self.prevLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
     [_prevLayer setFrame:[root bounds]];
@@ -105,7 +105,7 @@
     // set orientation of prev layer
     [_prevLayer.connection setVideoOrientation:orientation];
     // aspect ration
-    _prevLayer.videoGravity = AVLayerVideoGravityResizeAspect;
+    _prevLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
     
     [root addSublayer:_prevLayer];
     
@@ -117,5 +117,21 @@
     self.vidDataOutput = nil;
     self.vidDataOutputQueue = nil;
     self.session = nil;
+}
+
+- (CIImage*)getCIImageFromPixelBufferRef:(CMSampleBufferRef)sampleBuffer{
+    CVPixelBufferRef pb = CMSampleBufferGetImageBuffer(sampleBuffer);
+    return [CIImage imageWithCVPixelBuffer:pb];
+}
+
+#pragma mark AVCaptureVideoDataOutputSampleBufferDelegate
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
+    
+//    CIImage* image = [self getCIImageFromPixelBufferRef:sampleBuffer];
+    
+}
+
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didDropSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
+    NSLog(@"Buffer dropped");
 }
 @end

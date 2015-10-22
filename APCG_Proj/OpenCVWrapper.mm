@@ -11,6 +11,15 @@
 
 @implementation OpenCVWrapper
 
++ (instancetype)sharedInstance{
+    static OpenCVWrapper *instance= nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        instance = [OpenCVWrapper new];
+    });
+    return instance;
+}
+
 -(UIImage*)genEdgeImage:(UIImage*)inputImage{
     cv::Mat originalMat = [self cvMatFromUIImage:inputImage];
     

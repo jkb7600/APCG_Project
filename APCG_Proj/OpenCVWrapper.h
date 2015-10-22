@@ -10,6 +10,8 @@
 
 @interface OpenCVWrapper : NSObject
 
++ (instancetype)sharedInstance;
+
 - (UIImage*)genEdgeImage:(UIImage*)inputImage;
 
 @end
