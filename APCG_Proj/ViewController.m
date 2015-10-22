@@ -8,6 +8,10 @@
 
 #import "ViewController.h"
 #import "OpenCVWrapper.h"
+#import <QuartzCore/QuartzCore.h>
+#include <OpenGLES/ES2/gl.h>
+#include <OpenGLES/ES2/glext.h>
+#import <GLKit/GLKit.h>
 
 @interface ViewController ()
 @property (strong,nonatomic)OpenCVWrapper* cv2;
@@ -16,14 +20,25 @@
 @property (strong, nonatomic) AVCaptureVideoDataOutput* vidDataOutput;
 @property (strong, nonatomic) dispatch_queue_t vidDataOutputQueue;
 @property (strong, nonatomic) AVCaptureVideoPreviewLayer* prevLayer;
+@property (strong, nonatomic) GLKView* customPrevLayer;
 @end
 
-@implementation ViewController
+@implementation ViewController{
+    EAGLContext *_eaglContext;
+    CIContext *_ciContext;
+    
+    CGRect _videoPreviewBounds;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.cv2 = [OpenCVWrapper sharedInstance];
+    
+    _eaglContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    
+    // Must be done after all the GLKViews are properly set up
+    _ciContext = [CIContext contextWithEAGLContext:_eaglContext options:@{kCIContextWorkingColorSpace:[NSNull null]}];
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -97,17 +112,34 @@
         [videoConnection setVideoOrientation:orientation];
     }
     
+    // Custom Preview Layer
+    self.customPrevLayer = [[GLKView alloc] initWithFrame:self.view.bounds context:_eaglContext];
+//    self.customPrevLayer = NO;
+    
+    // rotatate 90 to account for native video image
+//    self.customPrevLayer.transform = CGAffineTransformMakeRotation(M_PI_2);
+    self.customPrevLayer.frame = self.view.bounds;
+    [self.view addSubview:self.customPrevLayer];
+    
+    [self.customPrevLayer bindDrawable];
+    
+    _videoPreviewBounds = CGRectZero;
+    _videoPreviewBounds.size.height = self.customPrevLayer.drawableHeight;
+    _videoPreviewBounds.size.width = self.customPrevLayer.drawableWidth;
+    
+    
+    
     // show preview layer -- TEMP. Will render custom soon
-    CALayer* root = self.view.layer;
-    self.prevLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
-    [_prevLayer setFrame:[root bounds]];
-    
-    // set orientation of prev layer
-    [_prevLayer.connection setVideoOrientation:orientation];
-    // aspect ration
-    _prevLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    
-    [root addSublayer:_prevLayer];
+//    CALayer* root = self.view.layer;
+//    self.prevLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
+//    [_prevLayer setFrame:[root bounds]];
+//    
+//    // set orientation of prev layer
+//    [_prevLayer.connection setVideoOrientation:orientation];
+//    // aspect ration
+//    _prevLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+//    
+//    [root addSublayer:_prevLayer];
     
     [self.session startRunning];
 }
@@ -128,6 +160,50 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     
 //    CIImage* image = [self getCIImageFromPixelBufferRef:sampleBuffer];
+    CMFormatDescriptionRef formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer);
+    
+    // update video dimensions
+    CIImage *sourceImage = [self getCIImageFromPixelBufferRef:sampleBuffer];
+    
+    CGRect sourceExtent = [sourceImage extent];
+    CGFloat sourceAspect = sourceExtent.size.width/sourceExtent.size.height;
+    
+    CGFloat previewAspect = _videoPreviewBounds.size.width/ _videoPreviewBounds.size.height;
+    
+    // maintain aspect ratio by clipping video image
+    
+    CGRect drawRect = sourceExtent;
+    
+    if (sourceAspect > previewAspect) {
+        // use full height, center crop width
+        drawRect.origin.x += (drawRect.size.width - drawRect.size.height * previewAspect)/2.0;
+        drawRect.size.width = drawRect.size.height * previewAspect;
+        
+    }else{
+        // use full width, center crop height
+        drawRect.origin.y += (drawRect.size.height - drawRect.size.width /previewAspect)/2.0;
+        drawRect.size.height = drawRect.size.width / previewAspect;
+    }
+    
+    [_customPrevLayer bindDrawable];
+    
+    if (_eaglContext != [EAGLContext currentContext]) {
+        [EAGLContext setCurrentContext:_eaglContext];
+    }
+    
+    glClearColor(0.5, 0.5, 0.5, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    // set blend mode to "Source over" so CI will use it
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    
+    if(sourceImage){
+        [_ciContext drawImage:sourceImage inRect:_videoPreviewBounds fromRect:drawRect];
+    }
+    
+    [_customPrevLayer display];
+    
     
 }
 

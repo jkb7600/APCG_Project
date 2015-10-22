@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D0019DC81BD1862E00430B88 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0019DC71BD1862E00430B88 /* AVFoundation.framework */; };
+		D073564D1BD96FAC00FB8671 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D073564C1BD96FAC00FB8671 /* OpenGLES.framework */; };
+		D073564F1BD9749300FB8671 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D073564E1BD9749300FB8671 /* GLKit.framework */; };
 		D0BDC9B31BC4815B008CB42A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BDC9B21BC4815B008CB42A /* main.m */; };
 		D0BDC9B61BC4815B008CB42A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BDC9B51BC4815B008CB42A /* AppDelegate.m */; };
 		D0BDC9B91BC4815B008CB42A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BDC9B81BC4815B008CB42A /* ViewController.m */; };
@@ -16,11 +18,11 @@
 		D0BDC9C11BC4815B008CB42A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D0BDC9BF1BC4815B008CB42A /* LaunchScreen.storyboard */; };
 		D0BDC9CC1BC4815B008CB42A /* APCG_ProjTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BDC9CB1BC4815B008CB42A /* APCG_ProjTests.m */; };
 		D0BDC9D71BC4815B008CB42A /* APCG_ProjUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BDC9D61BC4815B008CB42A /* APCG_ProjUITests.m */; };
-		D0BDC9E51BC4817A008CB42A /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E41BC4817A008CB42A /* opencv2.framework */; settings = {ASSET_TAGS = (); }; };
+		D0BDC9E51BC4817A008CB42A /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E41BC4817A008CB42A /* opencv2.framework */; };
 		D0BDC9E71BC481B2008CB42A /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E61BC481B2008CB42A /* AssetsLibrary.framework */; };
 		D0BDC9E91BC481BF008CB42A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BDC9E81BC481BF008CB42A /* CoreGraphics.framework */; };
-		D0ED4CE71BCDDF53000BAB5D /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0ED4CE61BCDDF53000BAB5D /* OpenCVWrapper.mm */; settings = {ASSET_TAGS = (); }; };
-		D0ED4CE91BCDE3CE000BAB5D /* mug.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D0ED4CE81BCDE3CE000BAB5D /* mug.jpg */; settings = {ASSET_TAGS = (); }; };
+		D0ED4CE71BCDDF53000BAB5D /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0ED4CE61BCDDF53000BAB5D /* OpenCVWrapper.mm */; };
+		D0ED4CE91BCDE3CE000BAB5D /* mug.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D0ED4CE81BCDE3CE000BAB5D /* mug.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 
 /* Begin PBXFileReference section */
 		D0019DC71BD1862E00430B88 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		D073564C1BD96FAC00FB8671 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		D073564E1BD9749300FB8671 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		D0BDC9AE1BC4815B008CB42A /* APCG_Proj.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APCG_Proj.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BDC9B21BC4815B008CB42A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D0BDC9B41BC4815B008CB42A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -71,6 +75,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D073564F1BD9749300FB8671 /* GLKit.framework in Frameworks */,
+				D073564D1BD96FAC00FB8671 /* OpenGLES.framework in Frameworks */,
 				D0019DC81BD1862E00430B88 /* AVFoundation.framework in Frameworks */,
 				D0BDC9E91BC481BF008CB42A /* CoreGraphics.framework in Frameworks */,
 				D0BDC9E71BC481B2008CB42A /* AssetsLibrary.framework in Frameworks */,
@@ -98,6 +104,8 @@
 		D0BDC9A51BC4815B008CB42A = {
 			isa = PBXGroup;
 			children = (
+				D073564E1BD9749300FB8671 /* GLKit.framework */,
+				D073564C1BD96FAC00FB8671 /* OpenGLES.framework */,
 				D0019DC71BD1862E00430B88 /* AVFoundation.framework */,
 				D0BDC9E81BC481BF008CB42A /* CoreGraphics.framework */,
 				D0BDC9E61BC481B2008CB42A /* AssetsLibrary.framework */,
