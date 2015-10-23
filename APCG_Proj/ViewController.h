@@ -10,7 +10,6 @@
 #import <AVFoundation/AVFoundation.h>
 
 @interface ViewController : UIViewController <AVCaptureVideoDataOutputSampleBufferDelegate>
-@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 
 
 @end
