@@ -152,14 +152,13 @@
 }
 
 - (CIImage*)getCIImageFromPixelBufferRef:(CMSampleBufferRef)sampleBuffer{
-    CVPixelBufferRef pb = CMSampleBufferGetImageBuffer(sampleBuffer);
-    return [CIImage imageWithCVPixelBuffer:pb];
+    CVImageBufferRef pb = CMSampleBufferGetImageBuffer(sampleBuffer);
+    return [CIImage imageWithCVImageBuffer:pb];
 }
 
 #pragma mark AVCaptureVideoDataOutputSampleBufferDelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     
-//    CIImage* image = [self getCIImageFromPixelBufferRef:sampleBuffer];
     CMFormatDescriptionRef formatDesc = CMSampleBufferGetFormatDescription(sampleBuffer);
     
     // update video dimensions
@@ -199,6 +198,8 @@
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
     if(sourceImage){
+        // TODO Memory leak!!
+        sourceImage = [self.cv2 genEdgeImageCI:sourceImage];
         [_ciContext drawImage:sourceImage inRect:_videoPreviewBounds fromRect:drawRect];
     }
     

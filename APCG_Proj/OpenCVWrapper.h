@@ -13,5 +13,6 @@
 + (instancetype)sharedInstance;
 
 - (UIImage*)genEdgeImage:(UIImage*)inputImage;
+- (CIImage*)genEdgeImageCI:(CIImage*)image;
 
 @end

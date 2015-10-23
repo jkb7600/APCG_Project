@@ -8,6 +8,7 @@
 
 #import "OpenCVWrapper.h"
 #import <opencv2/opencv.hpp>
+#import <QuartzCore/QuartzCore.h>
 
 @implementation OpenCVWrapper
 
@@ -32,17 +33,40 @@
     return [self UIImageFromCVMat:output];
 }
 
-/*
- Get the cvMatrix from an image
- */
--(cv::Mat)cvMatFromUIImage:(UIImage*)image{
-    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image.CGImage);
-    CGFloat cols = image.size.width;
-    CGFloat rows = image.size.height;
+- (CIImage*)genEdgeImageCI:(CIImage*)image{
     
-    cv::Mat cvMat(rows, cols, CV_8UC4); // 8 bits per component, 4 channels (color channels + alpha)
+    CIContext* context = [CIContext contextWithCGContext:nil options:nil];
+    
+    CGImageRef imgRef = [context createCGImage:image fromRect:[image extent]];
+    
+    cv::Mat originalMat = [self cvMatFromCGImage:imgRef columns:[image extent].size.width rows:[image extent].size.height];
+    CGImageRelease(imgRef);
+    cv::Mat grayMat;
+    cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
+    
+    cv::Mat output;
+    cv::Canny(grayMat, output, 80, 120);
+    
+    
+    CGImageRef out1 = [self CGImageRefFromMat:output];
+    CIImage *outputImg = [CIImage imageWithCGImage:out1 options:nil];
+    originalMat.release();
+    grayMat.release();
+    output.release();
+    CGImageRelease(out1);
+    return outputImg;
+}
+
+/*
+ Get cvMatrix from CGImage
+ */
+- (cv::Mat)cvMatFromCGImage:(CGImageRef)image columns:(CGFloat)columns rows:(CGFloat)rows {
+    CGColorSpaceRef colorSpace = CGImageGetColorSpace(image);
+
+    
+    cv::Mat cvMat(rows, columns, CV_8UC4); // 8 bits per component, 4 channels (color channels + alpha)
     CGContextRef contextRef = CGBitmapContextCreate(cvMat.data,     // Pointer to data
-                                                    cols,           // Width of bitmap
+                                                    columns,        // Width of bitmap
                                                     rows,           // Height of bitmap
                                                     8,              // Bits per component
                                                     cvMat.step[0],  // Bytes per row
@@ -50,12 +74,12 @@
                                                     kCGImageAlphaNoneSkipLast
                                                     | kCGBitmapByteOrderDefault); // Bitmap info flags
     
-    CGContextDrawImage(contextRef, CGRectMake(0, 0, cols, rows), image.CGImage);
+    CGContextDrawImage(contextRef, CGRectMake(0, 0, columns, rows), image);
     CGContextRelease(contextRef);
     return cvMat;
 }
 
--(UIImage *)UIImageFromCVMat:(cv::Mat)cvMat{
+- (CGImageRef)CGImageRefFromMat:(cv::Mat)cvMat{
     NSData *data = [NSData dataWithBytes:cvMat.data length:cvMat.elemSize()*cvMat.total()];
     
     CGColorSpaceRef colorspace;
@@ -71,11 +95,29 @@
     // Create CGImage from cv::Mat
     CGImageRef imageRef = CGImageCreate(cvMat.cols, cvMat.rows, 8, 8 * cvMat.elemSize(), cvMat.step[0], colorspace, kCGImageAlphaNone | kCGBitmapByteOrderDefault, provider, NULL, false, kCGRenderingIntentDefault);
     
+    CGDataProviderRelease(provider);
+    CGColorSpaceRelease(colorspace);
+    
+    return imageRef;
+
+}
+
+/*
+ Get the cvMatrix from a UIImage
+ */
+-(cv::Mat)cvMatFromUIImage:(UIImage*)image{
+    CGFloat cols = image.size.width;
+    CGFloat rows = image.size.height;
+    return [self cvMatFromCGImage:image.CGImage columns:cols rows:rows];
+}
+
+-(UIImage *)UIImageFromCVMat:(cv::Mat)cvMat{
+    CGImageRef imageRef = [self CGImageRefFromMat:cvMat];
+    
     // get uiimage from cgimage
     UIImage *finalImage = [UIImage imageWithCGImage:imageRef];
     CGImageRelease(imageRef);
-    CGDataProviderRelease(provider);
-    CGColorSpaceRelease(colorspace);
+
     return finalImage;
 }
 @end
