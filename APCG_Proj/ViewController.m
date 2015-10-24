@@ -68,6 +68,7 @@
             break;
         }
     }
+
     
     if(device == nil){
         NSLog(@"Could not access camera, terminating");
@@ -101,6 +102,14 @@
     // add output to session
     if ([self.session canAddOutput:_vidDataOutput]) {
         [self.session addOutput:_vidDataOutput];
+    }
+    
+    // Enable after output is added?
+    if ([device isTorchModeSupported:AVCaptureTorchModeAuto]) {
+        [device lockForConfiguration:nil];
+        [device setTorchMode:AVCaptureTorchModeAuto];
+        NSLog(@"Emabling auto torch mode");
+        [device unlockForConfiguration];
     }
     
     AVCaptureConnection *videoConnection = [_vidDataOutput connectionWithMediaType:AVMediaTypeVideo];
@@ -198,7 +207,6 @@
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
     if(sourceImage){
-        // TODO Memory leak!!
         sourceImage = [self.cv2 genEdgeImageCI:sourceImage];
         [_ciContext drawImage:sourceImage inRect:_videoPreviewBounds fromRect:drawRect];
     }

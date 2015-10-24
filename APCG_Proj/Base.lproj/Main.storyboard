@@ -15,24 +15,9 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K41-V3-uup">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <animations/>
-                            </imageView>
-                        </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="K41-V3-uup" secondAttribute="trailing" id="IQs-gE-rGy"/>
-                            <constraint firstItem="K41-V3-uup" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="IwO-c1-rF2"/>
-                            <constraint firstItem="K41-V3-uup" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="WIu-fd-pH1"/>
-                            <constraint firstItem="K41-V3-uup" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="esS-Eh-f0P"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="imageView" destination="K41-V3-uup" id="yk1-Fl-MnN"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
