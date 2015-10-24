@@ -207,6 +207,7 @@
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
     if(sourceImage){
+        //Call Open CV function for image and save it as source image
         sourceImage = [self.cv2 genEdgeImageCI:sourceImage];
         [_ciContext drawImage:sourceImage inRect:_videoPreviewBounds fromRect:drawRect];
     }

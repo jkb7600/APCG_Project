@@ -33,6 +33,7 @@
     return [self UIImageFromCVMat:output];
 }
 
+//EDGE DECTION FUNCTION
 - (CIImage*)genEdgeImageCI:(CIImage*)image{
     
     CIContext* context = [CIContext contextWithCGContext:nil options:nil];
@@ -52,7 +53,7 @@
     CIImage *outputImg = [CIImage imageWithCGImage:out1 options:nil];
     originalMat.release();
     grayMat.release();
-    output.release();
+    output.release();//IMPORT TTAAANT DAMMAGE JUSTIN
     CGImageRelease(out1);
     return outputImg;
 }
