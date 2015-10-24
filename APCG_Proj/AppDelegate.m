@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  APCG_Proj
 //
-//  Created by Justin Bennett on 10/6/15.
+//  Created by Justin Bennett on 10/6/15. Justin is Awesome
 //  Copyright © 2015 jkb7600. All rights reserved.
 //
 
