@@ -44,15 +44,37 @@
     cv::Mat grayMat;
     cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
     
+    cv::Mat blur;
+    cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
+    
+    
     cv::Mat output;
-    cv::Canny(grayMat, output, 80, 120);
+    cv::Canny(blur, output, 80, 120);
     
+//    cv::Mat element;
+//    element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3,3));
+//    
+//    cv::Mat dilate;
+//    cv::dilate(output, dilate, element);
+//    
+//    element.release();
     
-    CGImageRef out1 = [self CGImageRefFromMat:output];
+    cv::Mat multiplex;
+    cv::add(output, grayMat, multiplex);
+    
+//    dilate.release();
+    
+    //cv::Mat colorOut;
+    //cv::cvtColor(multiplex, colorOut, CV_GRAY2RGB);
+    
+    CGImageRef out1 = [self CGImageRefFromMat:multiplex];
     CIImage *outputImg = [CIImage imageWithCGImage:out1 options:nil];
     originalMat.release();
     grayMat.release();
+    blur.release();
     output.release();
+    multiplex.release();
+    //colorOut.release();
     CGImageRelease(out1);
     return outputImg;
 }
