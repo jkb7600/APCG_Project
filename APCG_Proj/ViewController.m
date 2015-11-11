@@ -21,6 +21,7 @@
 @property (strong, nonatomic) dispatch_queue_t vidDataOutputQueue;
 @property (strong, nonatomic) AVCaptureVideoPreviewLayer* prevLayer;
 @property (strong, nonatomic) GLKView* customPrevLayer;
+@property (strong, nonatomic) AVCaptureDevice* device;
 @end
 
 @implementation ViewController{
@@ -44,6 +45,7 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
 //    self.imageView.image = [self.cv2 genEdgeImage:[UIImage imageNamed:@"mug.jpg"]];
+    [self becomeFirstResponder];
     [self setupAVCapture];
 }
 
@@ -58,24 +60,24 @@
     self.session = [[AVCaptureSession alloc] init];
     [self.session setSessionPreset:AVCaptureSessionPresetMedium];
     
-    AVCaptureDevice* device;
+//    AVCaptureDevice* device;
     AVCaptureDevicePosition desiredPos = AVCaptureDevicePositionBack;
     
     // grab device
     for (AVCaptureDevice *dev in [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] ) {
         if ([dev position] == desiredPos) {
-            device = dev;
+            self.device = dev;
             break;
         }
     }
 
     
-    if(device == nil){
+    if(self.device == nil){
         NSLog(@"Could not access camera, terminating");
         return;
     }
     
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:self.device error:&error];
     
     if (!input || error) {
         NSLog(@"Error w/ AVCaptureDeviceInput %@", [error description]);
@@ -105,12 +107,12 @@
     }
     
     // Enable after output is added?
-    if ([device isTorchModeSupported:AVCaptureTorchModeAuto]) {
-        [device lockForConfiguration:nil];
-        [device setTorchMode:AVCaptureTorchModeAuto];
-        NSLog(@"Emabling auto torch mode");
-        [device unlockForConfiguration];
-    }
+//    if ([self.device isTorchModeSupported:AVCaptureTorchModeAuto]) {
+//        [self.device lockForConfiguration:nil];
+//        [self.device setTorchMode:AVCaptureTorchModeAuto];
+//        NSLog(@"Emabling auto torch mode");
+//        [self.device unlockForConfiguration];
+//    }
     
     AVCaptureConnection *videoConnection = [_vidDataOutput connectionWithMediaType:AVMediaTypeVideo];
     
@@ -219,4 +221,44 @@
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didDropSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
     NSLog(@"Buffer dropped");
 }
+
+#pragma mark -shake detection
+// TODO clean up
+-(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event{
+    if (motion == UIEventSubtypeMotionShake) {
+        NSLog(@"Shake detected");
+//        [self.session stopRunning];
+        NSError *error = nil;
+        if ([self.device torchMode] == AVCaptureTorchModeOff) {
+            // turn on
+            NSLog(@"Attempting to turn on torch");
+            if ([self.device isTorchModeSupported:AVCaptureTorchModeOn]) {
+                    NSError *error = nil;
+
+                [self.device lockForConfiguration:&error];
+                if (error!= nil) {
+                    NSLog(@"Error: %@", [error localizedDescription]);
+                }
+                [self.device setTorchMode:AVCaptureTorchModeOn];
+                [self.device unlockForConfiguration];
+            }
+        }else{
+            // turn off
+            NSLog(@"Attempting to turn off torch");
+            if ([self.device isTorchModeSupported:AVCaptureTorchModeOff]) {
+                [self.device lockForConfiguration:&error];
+                if (error!= nil) {
+                    NSLog(@"Error: %@", [error localizedDescription]);
+                }
+                [self.device setTorchMode:AVCaptureTorchModeOff];
+                [self.device unlockForConfiguration];
+            }
+        }
+//        [self.session startRunning];
+    }
+}
+- (BOOL)canBecomeFirstResponder{
+    return YES;
+}
+
 @end
