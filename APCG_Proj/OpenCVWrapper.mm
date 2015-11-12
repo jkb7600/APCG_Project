@@ -10,13 +10,19 @@
 #import <opencv2/opencv.hpp>
 #import <QuartzCore/QuartzCore.h>
 
-@implementation OpenCVWrapper
+@implementation OpenCVWrapper{
+}
+cv::CascadeClassifier face_cascade;
+
 
 + (instancetype)sharedInstance{
     static OpenCVWrapper *instance= nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [OpenCVWrapper new];
+        if (!face_cascade.load("lbpcascade_frontalface.xml")) {
+            NSLog(@"Error reading in");
+        }
     });
     return instance;
 }
@@ -43,6 +49,12 @@
     CGImageRelease(imgRef);
     cv::Mat grayMat;
     cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
+    
+    // face detection
+//    std::vector<Rect> faces;
+//    
+//    face_cascade.detectMultiScale(grayMat, faces)
+    //    face_cascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0, Size(80, 80) );
     
     cv::Mat blur;
     cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
