@@ -24,6 +24,7 @@
 		D0ED4CE71BCDDF53000BAB5D /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D0ED4CE61BCDDF53000BAB5D /* OpenCVWrapper.mm */; };
 		D0ED4CE91BCDE3CE000BAB5D /* mug.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D0ED4CE81BCDE3CE000BAB5D /* mug.jpg */; };
 		D0F4536A1BF40E620022BCD3 /* lbpcascade_frontalface.xml in Resources */ = {isa = PBXBuildFile; fileRef = D0F453691BF40E620022BCD3 /* lbpcascade_frontalface.xml */; };
+		D0F4536C1BF414FE0022BCD3 /* haarcascade_frontalface_default.xml in Resources */ = {isa = PBXBuildFile; fileRef = D0F4536B1BF414FE0022BCD3 /* haarcascade_frontalface_default.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		D0ED4CE61BCDDF53000BAB5D /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
 		D0ED4CE81BCDE3CE000BAB5D /* mug.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mug.jpg; sourceTree = "<group>"; };
 		D0F453691BF40E620022BCD3 /* lbpcascade_frontalface.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = lbpcascade_frontalface.xml; sourceTree = "<group>"; };
+		D0F4536B1BF414FE0022BCD3 /* haarcascade_frontalface_default.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = haarcascade_frontalface_default.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +152,7 @@
 		D0BDC9B11BC4815B008CB42A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D0F4536B1BF414FE0022BCD3 /* haarcascade_frontalface_default.xml */,
 				D0F453691BF40E620022BCD3 /* lbpcascade_frontalface.xml */,
 				D0ED4CE81BCDE3CE000BAB5D /* mug.jpg */,
 				D0BDC9B21BC4815B008CB42A /* main.m */,
@@ -282,6 +285,7 @@
 				D0BDC9BE1BC4815B008CB42A /* Assets.xcassets in Resources */,
 				D0BDC9BC1BC4815B008CB42A /* Main.storyboard in Resources */,
 				D0ED4CE91BCDE3CE000BAB5D /* mug.jpg in Resources */,
+				D0F4536C1BF414FE0022BCD3 /* haarcascade_frontalface_default.xml in Resources */,
 				D0F4536A1BF40E620022BCD3 /* lbpcascade_frontalface.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -9,10 +9,10 @@
 #import "OpenCVWrapper.h"
 #import <opencv2/opencv.hpp>
 #import <QuartzCore/QuartzCore.h>
+#include <ImageIO/ImageIO.h>
 
 @implementation OpenCVWrapper{
 }
-cv::CascadeClassifier face_cascade;
 
 
 + (instancetype)sharedInstance{
@@ -20,9 +20,9 @@ cv::CascadeClassifier face_cascade;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [OpenCVWrapper new];
-        if (!face_cascade.load("lbpcascade_frontalface.xml")) {
-            NSLog(@"Error reading in");
-        }
+//        if (!face_cascade.load("lbpcascade_frontalface.xml")) {
+//            NSLog(@"Error reading in");
+//        }
     });
     return instance;
 }
@@ -51,10 +51,15 @@ cv::CascadeClassifier face_cascade;
     cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
     
     // face detection
-//    std::vector<Rect> faces;
-//    
-//    face_cascade.detectMultiScale(grayMat, faces)
-    //    face_cascade.detectMultiScale( frame_gray, faces, 1.1, 2, 0, Size(80, 80) );
+    std::vector<cv::Rect> faces;
+    cv::CascadeClassifier* faceCascade;
+    
+    // uncomment for loading classifier
+//    faceCascade = [self loadClassifier];
+//    faceCascade->detectMultiScale(grayMat, faces);
+    
+//    face_cascade->detectMultiScale( grayMat, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30) );
+//    faceCascade->detectMultiScale( frame_gray, faces, 1.1, 2, 0, Size(80, 80) );
     
     cv::Mat blur;
     cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
@@ -74,10 +79,19 @@ cv::CascadeClassifier face_cascade;
     cv::Mat multiplex;
     cv::add(output, grayMat, multiplex);
     
-//    dilate.release();
-    
-    //cv::Mat colorOut;
-    //cv::cvtColor(multiplex, colorOut, CV_GRAY2RGB);
+    // cvt back to color
+//    cv::cvtColor(multiplex, multiplex, cv::COLOR_GRAY2BGRA);
+////
+////    // Face detection built in
+//    CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:@{CIDetectorAccuracy: CIDetectorAccuracyHigh}];
+//    
+//    NSArray* features = [detector featuresInImage:image options:@{CIDetectorSmile: @NO, CIDetectorImageOrientation:[NSNumber numberWithInt:4]}];
+//    
+//    for(CIFaceFeature* f in features){
+//        cv::Point center = cv::Point(f.bounds.origin.x+(f.bounds.size.width/2),f.bounds.origin.y+(f.bounds.size.height/2));
+//        cv::circle(multiplex, center, f.bounds.size.width/2, cv::Scalar(255,0,0));
+//    }
+//    
     
     CGImageRef out1 = [self CGImageRefFromMat:multiplex];
     CIImage *outputImg = [CIImage imageWithCGImage:out1 options:nil];
@@ -89,6 +103,13 @@ cv::CascadeClassifier face_cascade;
     //colorOut.release();
     CGImageRelease(out1);
     return outputImg;
+}
+
+- (cv::CascadeClassifier*)loadClassifier{
+    NSString* haar = [[NSBundle mainBundle] pathForResource:@"haarcascade_frontalface_default" ofType:@"xml"];
+    cv::CascadeClassifier* cascade = new cv::CascadeClassifier();
+    cascade->load([haar UTF8String]);
+    return cascade;
 }
 
 /*

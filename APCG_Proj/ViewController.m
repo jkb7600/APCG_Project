@@ -227,36 +227,30 @@
 -(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event{
     if (motion == UIEventSubtypeMotionShake) {
         NSLog(@"Shake detected");
-//        [self.session stopRunning];
-        NSError *error = nil;
-        if ([self.device torchMode] == AVCaptureTorchModeOff) {
-            // turn on
-            NSLog(@"Attempting to turn on torch");
-            if ([self.device isTorchModeSupported:AVCaptureTorchModeOn]) {
-                    NSError *error = nil;
-
-                [self.device lockForConfiguration:&error];
-                if (error!= nil) {
-                    NSLog(@"Error: %@", [error localizedDescription]);
-                }
-                [self.device setTorchMode:AVCaptureTorchModeOn];
-                [self.device unlockForConfiguration];
-            }
-        }else{
-            // turn off
-            NSLog(@"Attempting to turn off torch");
-            if ([self.device isTorchModeSupported:AVCaptureTorchModeOff]) {
-                [self.device lockForConfiguration:&error];
-                if (error!= nil) {
-                    NSLog(@"Error: %@", [error localizedDescription]);
-                }
-                [self.device setTorchMode:AVCaptureTorchModeOff];
-                [self.device unlockForConfiguration];
-            }
-        }
-//        [self.session startRunning];
+        [self setTorch:[self.device torchMode]];
     }
 }
+
+- (void)setTorch:(AVCaptureTorchMode)currentMode{
+    AVCaptureTorchMode desired;
+    if (currentMode==AVCaptureTorchModeOff) {
+        desired = AVCaptureTorchModeOn;
+    }else{
+        desired = AVCaptureTorchModeOff;
+    }
+    
+    if ([self.device isTorchModeSupported:desired]) {
+        NSError *error = nil;
+        
+        [self.device lockForConfiguration:&error];
+        if (error!= nil) {
+            NSLog(@"Error: %@", [error localizedDescription]);
+        }
+        [self.device setTorchMode:desired];
+        [self.device unlockForConfiguration];
+    }
+}
+
 - (BOOL)canBecomeFirstResponder{
     return YES;
 }
