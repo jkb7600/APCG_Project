@@ -24,11 +24,18 @@
 @property (strong, nonatomic) AVCaptureDevice* device;
 @end
 
+typedef enum DisplayType:NSUInteger{
+    kDisplayTypeEdges,
+    kDisplayTypeEdgesHybrid,
+    kDisplayTypeMultiplex
+} DisplayType;
+
 @implementation ViewController{
     EAGLContext *_eaglContext;
     CIContext *_ciContext;
     
     CGRect _videoPreviewBounds;
+    DisplayType dType;
 }
 
 - (void)viewDidLoad {
@@ -40,6 +47,7 @@
     
     // Must be done after all the GLKViews are properly set up
     _ciContext = [CIContext contextWithEAGLContext:_eaglContext options:@{kCIContextWorkingColorSpace:[NSNull null]}];
+    dType = kDisplayTypeEdges;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -106,14 +114,6 @@
         [self.session addOutput:_vidDataOutput];
     }
     
-    // Enable after output is added?
-//    if ([self.device isTorchModeSupported:AVCaptureTorchModeAuto]) {
-//        [self.device lockForConfiguration:nil];
-//        [self.device setTorchMode:AVCaptureTorchModeAuto];
-//        NSLog(@"Emabling auto torch mode");
-//        [self.device unlockForConfiguration];
-//    }
-    
     AVCaptureConnection *videoConnection = [_vidDataOutput connectionWithMediaType:AVMediaTypeVideo];
     
     AVCaptureVideoOrientation orientation = AVCaptureVideoOrientationPortrait;
@@ -137,20 +137,6 @@
     _videoPreviewBounds = CGRectZero;
     _videoPreviewBounds.size.height = self.customPrevLayer.drawableHeight;
     _videoPreviewBounds.size.width = self.customPrevLayer.drawableWidth;
-    
-    
-    
-    // show preview layer -- TEMP. Will render custom soon
-//    CALayer* root = self.view.layer;
-//    self.prevLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.session];
-//    [_prevLayer setFrame:[root bounds]];
-//    
-//    // set orientation of prev layer
-//    [_prevLayer.connection setVideoOrientation:orientation];
-//    // aspect ration
-//    _prevLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-//    
-//    [root addSublayer:_prevLayer];
     
     [self.session startRunning];
 }
@@ -209,7 +195,16 @@
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     
     if(sourceImage){
-        sourceImage = [self.cv2 genEdgeImageCI:sourceImage];
+        if (dType == kDisplayTypeEdges) {
+           sourceImage = [self.cv2 genEdgeImageCI:sourceImage];
+        }else if(dType == kDisplayTypeEdgesHybrid){
+            sourceImage = [self.cv2 genEdgeHybridImageCI:sourceImage];
+        }else if(dType == kDisplayTypeMultiplex){
+            // TODO IMPLIMENT MULTIPLEX
+            sourceImage = [self.cv2 genEdgeHybridImageCI:sourceImage];
+        }else{
+            NSLog(@"Unknown Display Type");
+        }
         [_ciContext drawImage:sourceImage inRect:_videoPreviewBounds fromRect:drawRect];
     }
     
@@ -223,7 +218,6 @@
 }
 
 #pragma mark -shake detection
-// TODO clean up
 -(void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event{
     if (motion == UIEventSubtypeMotionShake) {
         NSLog(@"Shake detected");
@@ -253,6 +247,15 @@
 
 - (BOOL)canBecomeFirstResponder{
     return YES;
+}
+
+- (IBAction)userTappedScreen:(id)sender {
+//    NSLog(@"User tapped Screen");
+    if (dType == kDisplayTypeMultiplex) {
+        dType = kDisplayTypeEdges;
+    }else{
+        dType++;
+    }
 }
 
 @end

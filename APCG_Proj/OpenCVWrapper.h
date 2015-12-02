@@ -14,5 +14,7 @@
 
 - (UIImage*)genEdgeImage:(UIImage*)inputImage;
 - (CIImage*)genEdgeImageCI:(CIImage*)image;
+- (CIImage*)genEdgeHybridImageCI:(CIImage*)image;
+- (CIImage*)genMultiplexImageCI:(CIImage*)image;
 
 @end

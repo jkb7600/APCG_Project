@@ -39,7 +39,35 @@
     return [self UIImageFromCVMat:output];
 }
 
-- (CIImage*)genEdgeImageCI:(CIImage*)image{
+- (CIImage*)genEdgeImageCI:(CIImage *)image{
+    CIContext* context = [CIContext contextWithCGContext:nil options:nil];
+    
+    CGImageRef imgRef = [context createCGImage:image fromRect:[image extent]];
+    
+    cv::Mat originalMat = [self cvMatFromCGImage:imgRef columns:[image extent].size.width rows:[image extent].size.height];
+    CGImageRelease(imgRef);
+    cv::Mat grayMat;
+    cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
+    
+    cv::Mat blur;
+    cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
+    
+    
+    cv::Mat output;
+    cv::Canny(blur, output, 80, 120);
+    
+    
+    CGImageRef out1 = [self CGImageRefFromMat:output];
+    CIImage *outputImg = [CIImage imageWithCGImage:out1 options:nil];
+    originalMat.release();
+    grayMat.release();
+    blur.release();
+    output.release();
+    CGImageRelease(out1);
+    return outputImg;
+}
+
+- (CIImage*)genEdgeHybridImageCI:(CIImage*)image{
     
     CIContext* context = [CIContext contextWithCGContext:nil options:nil];
     
@@ -50,17 +78,6 @@
     cv::Mat grayMat;
     cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
     
-    // face detection
-    std::vector<cv::Rect> faces;
-    cv::CascadeClassifier* faceCascade;
-    
-    // uncomment for loading classifier
-//    faceCascade = [self loadClassifier];
-//    faceCascade->detectMultiScale(grayMat, faces);
-    
-//    face_cascade->detectMultiScale( grayMat, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30) );
-//    faceCascade->detectMultiScale( frame_gray, faces, 1.1, 2, 0, Size(80, 80) );
-    
     cv::Mat blur;
     cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
     
@@ -68,30 +85,8 @@
     cv::Mat output;
     cv::Canny(blur, output, 80, 120);
     
-//    cv::Mat element;
-//    element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3,3));
-//    
-//    cv::Mat dilate;
-//    cv::dilate(output, dilate, element);
-//    
-//    element.release();
-    
     cv::Mat multiplex;
     cv::add(output, grayMat, multiplex);
-    
-    // cvt back to color
-//    cv::cvtColor(multiplex, multiplex, cv::COLOR_GRAY2BGRA);
-////
-////    // Face detection built in
-//    CIDetector *detector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:@{CIDetectorAccuracy: CIDetectorAccuracyHigh}];
-//    
-//    NSArray* features = [detector featuresInImage:image options:@{CIDetectorSmile: @NO, CIDetectorImageOrientation:[NSNumber numberWithInt:4]}];
-//    
-//    for(CIFaceFeature* f in features){
-//        cv::Point center = cv::Point(f.bounds.origin.x+(f.bounds.size.width/2),f.bounds.origin.y+(f.bounds.size.height/2));
-//        cv::circle(multiplex, center, f.bounds.size.width/2, cv::Scalar(255,0,0));
-//    }
-//    
     
     CGImageRef out1 = [self CGImageRefFromMat:multiplex];
     CIImage *outputImg = [CIImage imageWithCGImage:out1 options:nil];
@@ -100,7 +95,6 @@
     blur.release();
     output.release();
     multiplex.release();
-    //colorOut.release();
     CGImageRelease(out1);
     return outputImg;
 }
