@@ -27,17 +27,17 @@
     return instance;
 }
 
--(UIImage*)genEdgeImage:(UIImage*)inputImage{
-    cv::Mat originalMat = [self cvMatFromUIImage:inputImage];
-    
-    cv::Mat grayMat;
-    cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
-    
-    cv::Mat output;
-    cv::Canny(grayMat, output, 80, 120);
-    
-    return [self UIImageFromCVMat:output];
-}
+//-(UIImage*)genEdgeImage:(UIImage*)inputImage{
+//    cv::Mat originalMat = [self cvMatFromUIImage:inputImage];
+//    
+//    cv::Mat grayMat;
+//    cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
+//    
+//    cv::Mat output;
+//    cv::Canny(grayMat, output, 80, 120);
+//    
+//    return [self UIImageFromCVMat:output];
+//}
 
 - (CIImage*)genEdgeImageCI:(CIImage *)image{
     CIContext* context = [CIContext contextWithCGContext:nil options:nil];
@@ -95,6 +95,41 @@
     blur.release();
     output.release();
     multiplex.release();
+    CGImageRelease(out1);
+    return outputImg;
+}
+
+- (CIImage*)genMultiplexImageCI:(CIImage *)image{
+    CIContext* context = [CIContext contextWithCGContext:nil options:nil];
+    
+    CGImageRef imgRef = [context createCGImage:image fromRect:[image extent]];
+    
+    cv::Mat originalMat = [self cvMatFromCGImage:imgRef columns:[image extent].size.width rows:[image extent].size.height];
+    CGImageRelease(imgRef);
+    cv::Mat grayMat;
+    cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
+    
+//    cv::Mat blur;
+//    cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
+    
+    
+    cv::Mat edge;
+    cv::Canny(grayMat, edge, 80, 120);
+    
+    cv::Mat smallEdge;
+    cv::resize(edge, smallEdge, cv::Size(150,150));
+    
+    
+    smallEdge.copyTo(grayMat(cv::Rect(100,150,smallEdge.rows,smallEdge.cols)));
+    
+    
+    CGImageRef out1 = [self CGImageRefFromMat:grayMat];
+    CIImage *outputImg = [CIImage imageWithCGImage:out1 options:nil];
+    originalMat.release();
+    grayMat.release();
+//    blur.release();
+    edge.release();
+    smallEdge.release();
     CGImageRelease(out1);
     return outputImg;
 }

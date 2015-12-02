@@ -201,7 +201,7 @@ typedef enum DisplayType:NSUInteger{
             sourceImage = [self.cv2 genEdgeHybridImageCI:sourceImage];
         }else if(dType == kDisplayTypeMultiplex){
             // TODO IMPLIMENT MULTIPLEX
-            sourceImage = [self.cv2 genEdgeHybridImageCI:sourceImage];
+            sourceImage = [self.cv2 genMultiplexImageCI:sourceImage];
         }else{
             NSLog(@"Unknown Display Type");
         }
@@ -214,7 +214,7 @@ typedef enum DisplayType:NSUInteger{
 }
 
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didDropSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection{
-    NSLog(@"Buffer dropped");
+//    NSLog(@"Buffer dropped");
 }
 
 #pragma mark -shake detection
