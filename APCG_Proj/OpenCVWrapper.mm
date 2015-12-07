@@ -52,6 +52,12 @@
     cv::Mat blur;
     cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
     
+    int erosion_size = 1;
+
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_CROSS,cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
+                                                cv::Point(erosion_size, erosion_size) );
+    cv::dilate(blur, blur, element);
+    
     
     cv::Mat output;
     cv::Canny(blur, output, 80, 120);
@@ -81,6 +87,11 @@
     cv::Mat blur;
     cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
     
+    int erosion_size = 1;
+    
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_CROSS,cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
+                                                cv::Point(erosion_size, erosion_size) );
+    cv::dilate(blur, blur, element);
     
     cv::Mat output;
     cv::Canny(blur, output, 80, 120);
@@ -109,27 +120,42 @@
     cv::Mat grayMat;
     cv::cvtColor(originalMat, grayMat, CV_BGR2GRAY);
     
-//    cv::Mat blur;
-//    cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
-    
+    cv::Mat blur;
+    cv::GaussianBlur(grayMat, blur, cv::Size(3,3), 3);
     
     cv::Mat edge;
-    cv::Canny(grayMat, edge, 80, 120);
+    cv::Canny(blur, edge, 80, 120);
+    int erosion_size = 1;
+    cv::Mat element = cv::getStructuringElement(cv::MORPH_CROSS,cv::Size(2 * erosion_size + 1, 2 * erosion_size + 1),
+                                                cv::Point(erosion_size, erosion_size) );
+    cv::dilate(edge, edge, element);
     
     cv::Mat smallEdge;
     cv::resize(edge, smallEdge, cv::Size(150,150));
     
+    cv::Mat ZeroMat;
+    ZeroMat.create(grayMat.rows, grayMat.cols, grayMat.type());
     
-    smallEdge.copyTo(grayMat(cv::Rect(100,150,smallEdge.rows,smallEdge.cols)));
+    cv::copyMakeBorder(smallEdge, smallEdge, 1, 1, 1, 1, cv::BORDER_CONSTANT,255);
     
+    smallEdge.copyTo(ZeroMat(cv::Rect(100,150,smallEdge.rows,smallEdge.cols)));
     
-    CGImageRef out1 = [self CGImageRefFromMat:grayMat];
+//    cv::add(grayMat, ZeroMat, grayMat);
+    
+    cv::Mat output;
+    cv::cvtColor(ZeroMat, ZeroMat, CV_GRAY2RGBA);
+    
+    cv::add(ZeroMat, originalMat, output);
+    
+    CGImageRef out1 = [self CGImageRefFromMat:output];
     CIImage *outputImg = [CIImage imageWithCGImage:out1 options:nil];
     originalMat.release();
     grayMat.release();
 //    blur.release();
     edge.release();
     smallEdge.release();
+    ZeroMat.release();
+    output.release();
     CGImageRelease(out1);
     return outputImg;
 }
